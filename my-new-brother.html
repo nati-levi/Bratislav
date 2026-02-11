@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your New Brother — Bratislav</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Fredoka:wght@400;600;700&display=swap');
+
+  :root {
+    --bg: #1a1028;
+    --card: #2a1f3d;
+    --accent: #ff6b35;
+    --accent2: #ffd166;
+    --accent3: #06d6a0;
+    --text: #f0e6ff;
+    --text-dim: #9b8ab8;
+    --danger: #ef476f;
+    --glow: rgba(255, 107, 53, 0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Fredoka', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image: 
+      radial-gradient(ellipse at 20% 50%, rgba(255,107,53,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(6,214,160,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(255,209,102,0.05) 0%, transparent 50%);
+  }
+
+  .noise {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    opacity: 0.03; pointer-events: none; z-index: 999;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    position: relative;
+  }
+
+  h1 {
+    font-family: 'Bungee Shade', cursive;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    text-align: center;
+    color: var(--accent);
+    text-shadow: 0 0 30px var(--glow);
+    margin-bottom: 8px;
+    animation: titlePulse 3s ease-in-out infinite;
+  }
+
+  @keyframes titlePulse {
+    0%, 100% { text-shadow: 0 0 30px var(--glow); }
+    50% { text-shadow: 0 0 50px var(--glow), 0 0 80px rgba(255,107,53,0.15); }
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+  }
+
+  /* Brother Avatar */
+  .brother-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .avatar-wrapper {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin-bottom: 12px;
+  }
+
+  .avatar {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 72px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 8px 32px rgba(255,107,53,0.25);
+    user-select: none;
+    position: relative;
+    z-index: 2;
+  }
+
+  .avatar:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 48px rgba(255,107,53,0.4);
+  }
+
+  .avatar:active {
+    transform: scale(0.95);
+  }
+
+  .avatar.shooting {
+    animation: shake 0.1s linear 5;
+  }
+
+  .avatar.revenging {
+    animation: spin 0.6s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px) rotate(-2deg); }
+    75% { transform: translateX(4px) rotate(2deg); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+
+  .mood-ring {
+    position: absolute;
+    top: -6px; left: -6px; right: -6px; bottom: -6px;
+    border-radius: 50%;
+    border: 3px solid var(--accent3);
+    opacity: 0;
+    animation: moodPulse 2s ease-in-out infinite;
+    z-index: 1;
+  }
+
+  @keyframes moodPulse {
+    0%, 100% { opacity: 0; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.08); }
+  }
+
+  .brother-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+
+  .brother-title {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Speech Bubble */
+  .speech-bubble {
+    background: var(--card);
+    border: 2px solid rgba(255,107,53,0.2);
+    border-radius: 20px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    position: relative;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    transition: border-color 0.3s;
+  }
+
+  .speech-bubble::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid rgba(255,107,53,0.2);
+  }
+
+  .speech-bubble::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid var(--card);
+  }
+
+  /* Stats */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .stat {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 12px 8px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: transform 0.2s;
+  }
+
+  .stat:hover { transform: translateY(-2px); }
+
+  .stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  /* Action Buttons */
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .btn {
+    border: none;
+    border-radius: 14px;
+    padding: 14px 12px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+  .btn:active { transform: translateY(0); }
+
+  .btn-shoot {
+    background: linear-gradient(135deg, #ef476f, #d63865);
+    color: white;
+  }
+
+  .btn-revenge {
+    background: linear-gradient(135deg, #7b2ff7, #5a1fd0);
+    color: white;
+  }
+
+  .btn-talk {
+    background: linear-gradient(135deg, var(--accent3), #05b88a);
+    color: #1a1028;
+  }
+
+  .btn-annoy {
+    background: linear-gradient(135deg, var(--accent), #e05a2b);
+    color: white;
+  }
+
+  .btn-feed {
+    background: linear-gradient(135deg, var(--accent2), #e0b840);
+    color: #1a1028;
+  }
+
+  .btn-fight {
+    background: linear-gradient(135deg, #e63946, #c1121f);
+    color: white;
+  }
+
+  .btn span.emoji {
+    font-size: 1.3rem;
+  }
+
+  /* Sound section */
+  .sound-section {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .sound-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .sound-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .sound-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 10px 6px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 0.72rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .sound-btn:hover {
+    background: rgba(255,107,53,0.15);
+    border-color: var(--accent);
+    transform: scale(1.05);
+  }
+
+  .sound-btn:active { transform: scale(0.95); }
+
+  .sound-btn .sound-emoji {
+    display: block;
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+  }
+
+  /* Log */
+  .log {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 14px 16px;
+    max-height: 160px;
+    overflow-y: auto;
+    border: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 16px;
+  }
+
+  .log-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+
+  .log-entry {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    animation: fadeIn 0.3s ease;
+  }
+
+  .log-entry:last-child { border-bottom: none; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .log::-webkit-scrollbar { width: 4px; }
+  .log::-webkit-scrollbar-track { background: transparent; }
+  .log::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  /* Muzzle flash */
+  .muzzle-flash {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 200, 50, 0.15);
+    pointer-events: none;
+    z-index: 998;
+    animation: flash 0.08s ease-out;
+  }
+
+  @keyframes flash {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  /* Revenge overlay */
+  .revenge-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(123, 47, 247, 0.2);
+    pointer-events: none;
+    z-index: 998;
+    animation: revengeFlash 0.6s ease-out;
+  }
+
+  @keyframes revengeFlash {
+    0% { opacity: 0; }
+    30% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 0.7rem;
+    color: rgba(155, 138, 184, 0.4);
+    padding: 8px 0 20px;
+  }
+
+  /* Bullet particles */
+  .particle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    background: var(--accent2);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 997;
+    animation: particleFly 0.6s ease-out forwards;
+  }
+
+  @keyframes particleFly {
+    to {
+      opacity: 0;
+      transform: translate(var(--dx), var(--dy));
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+
+<div class="container">
+  <h1>BRATISLAV</h1>
+  <p class="subtitle">Your New Brother · Est. Just Now</p>
+
+  <div class="brother-area">
+    <div class="avatar-wrapper">
+      <div class="mood-ring" id="moodRing"></div>
+      <div class="avatar" id="avatar" onclick="poke()">😎</div>
+    </div>
+    <div class="brother-name" id="brotherName">Bratislav</div>
+    <div class="brother-title">PROFESSIONAL SIBLING</div>
+  </div>
+
+  <div class="speech-bubble" id="speechBubble">
+    Yo! I'm your new brother. I already ate your leftovers. 🍕
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-value" id="annoyance">0</div>
+      <div class="stat-label">Annoyance</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="love">50</div>
+      <div class="stat-label">Love</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="chaos">0</div>
+      <div class="stat-label">Chaos</div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-shoot" onclick="machineGunShooter()">
+      <span class="emoji">🔫</span> Machine Gun
+    </button>
+    <button class="btn btn-revenge" onclick="yurisRevenge()">
+      <span class="emoji">⚡</span> Yuri's Revenge
+    </button>
+    <button class="btn btn-talk" onclick="talkToBro()">
+      <span class="emoji">💬</span> Talk
+    </button>
+    <button class="btn btn-annoy" onclick="annoyBro()">
+      <span class="emoji">👆</span> Annoy
+    </button>
+    <button class="btn btn-feed" onclick="feedBro()">
+      <span class="emoji">🍔</span> Feed
+    </button>
+    <button class="btn btn-fight" onclick="fightBro()">
+      <span class="emoji">🥊</span> Pillow Fight
+    </button>
+  </div>
+
+  <div class="sound-section">
+    <div class="sound-title">🎮 Sound Board</div>
+    <div class="sound-grid">
+      <button class="sound-btn" onclick="playSound('burst')">
+        <span class="sound-emoji">💥</span>
+        Burst Fire
+      </button>
+      <button class="sound-btn" onclick="playSound('reload')">
+        <span class="sound-emoji">🔄</span>
+        Reload
+      </button>
+      <button class="sound-btn" onclick="playSound('mindcontrol')">
+        <span class="sound-emoji">🧠</span>
+        Mind Control
+      </button>
+      <button class="sound-btn" onclick="playSound('kirov')">
+        <span class="sound-emoji">🛩️</span>
+        Kirov Report
+      </button>
+      <button class="sound-btn" onclick="playSound('conscript')">
+        <span class="sound-emoji">🪖</span>
+        Conscript
+      </button>
+      <button class="sound-btn" onclick="playSound('explosion')">
+        <span class="sound-emoji">🔥</span>
+        Explosion
+      </button>
+    </div>
+  </div>
+
+  <div class="log" id="log">
+    <div class="log-title">📜 Brother Log</div>
+    <div class="log-entry">🎉 Bratislav was born into your family!</div>
+  </div>
+
+  <div class="footer">Bratislav v1.0 · No Returns · No Refunds</div>
+</div>
+
+<script>
+// ====== AUDIO ENGINE (Web Audio API - no files needed!) ======
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function resumeAudio() {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+document.addEventListener('click', resumeAudio, { once: true });
+
+// Machine Gun Shooter sound
+function playMachineGun() {
+  const now = audioCtx.currentTime;
+  const shots = 8 + Math.floor(Math.random() * 6);
+  for (let i = 0; i < shots; i++) {
+    const t = now + i * 0.07;
+    // Noise burst for each shot
+    const bufferSize = audioCtx.sampleRate * 0.04;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let j = 0; j < bufferSize; j++) {
+      data[j] = (Math.random() * 2 - 1) * Math.exp(-j / (bufferSize * 0.15));
+    }
+    const src = audioCtx.createBufferSource();
+    src.buffer = buffer;
+    
+    // Low pass for punch
+    const lp = audioCtx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.setValueAtTime(3000, t);
+    lp.frequency.exponentialRampToValueAtTime(300, t + 0.04);
+
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.4, t);
+    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05);
+
+    src.connect(lp).connect(gain).connect(audioCtx.destination);
+    src.start(t);
+    src.stop(t + 0.05);
+
+    // Thump
+    const osc = audioCtx.createOscillator();
+    osc.frequency.setValueAtTime(150, t);
+    osc.frequency.exponentialRampToValueAtTime(40, t + 0.06);
+    const oscGain = audioCtx.createGain();
+    oscGain.gain.setValueAtTime(0.3, t);
+    oscGain.gain.exponentialRampToValueAtTime(0.01, t + 0.06);
+    osc.connect(oscGain).connect(audioCtx.destination);
+    osc.start(t);
+    osc.stop(t + 0.06);
+  }
+}
+
+// Yuri's Revenge - eerie mind control synth
+function playYuriRevenge() {
+  const now = audioCtx.currentTime;
+  
+  // Eerie warble
+  const osc1 = audioCtx.createOscillator();
+  osc1.type = 'sawtooth';
+  osc1.frequency.setValueAtTime(180, now);
+  osc1.frequency.linearRampToValueAtTime(320, now + 0.3);
+  osc1.frequency.linearRampToValueAtTime(160, now + 0.6);
+  osc1.frequency.linearRampToValueAtTime(400, now + 0.9);
+  osc1.frequency.linearRampToValueAtTime(120, now + 1.2);
+
+  const osc2 = audioCtx.createOscillator();
+  osc2.type = 'sine';
+  osc2.frequency.setValueAtTime(440, now);
+  osc2.frequency.linearRampToValueAtTime(880, now + 0.5);
+  osc2.frequency.linearRampToValueAtTime(220, now + 1.0);
+
+  // LFO for tremolo
+  const lfo = audioCtx.createOscillator();
+  lfo.frequency.value = 8;
+  const lfoGain = audioCtx.createGain();
+  lfoGain.gain.value = 0.3;
+  lfo.connect(lfoGain).connect(osc1.frequency);
+
+  const mainGain = audioCtx.createGain();
+  mainGain.gain.setValueAtTime(0.25, now);
+  mainGain.gain.linearRampToValueAtTime(0.35, now + 0.4);
+  mainGain.gain.exponentialRampToValueAtTime(0.01, now + 1.3);
+
+  // Reverb-like delay
+  const delay = audioCtx.createDelay();
+  delay.delayTime.value = 0.12;
+  const feedback = audioCtx.createGain();
+  feedback.gain.value = 0.3;
+  delay.connect(feedback).connect(delay);
+
+  osc1.connect(mainGain);
+  osc2.connect(mainGain);
+  mainGain.connect(audioCtx.destination);
+  mainGain.connect(delay).connect(audioCtx.destination);
+  
+  lfo.start(now);
+  osc1.start(now);
+  osc2.start(now);
+  lfo.stop(now + 1.3);
+  osc1.stop(now + 1.3);
+  osc2.stop(now + 1.3);
+
+  // "Psychic" high pitch sweep
+  const sweep = audioCtx.createOscillator();
+  sweep.type = 'triangle';
+  sweep.frequency.setValueAtTime(2000, now);
+  sweep.frequency.exponentialRampToValueAtTime(200, now + 1.2);
+  const sweepGain = audioCtx.createGain();
+  sweepGain.gain.setValueAtTime(0.08, now);
+  sweepGain.gain.exponentialRampToValueAtTime(0.01, now + 1.2);
+  sweep.connect(sweepGain).connect(audioCtx.destination);
+  sweep.start(now);
+  sweep.stop(now + 1.2);
+}
+
+// Burst fire
+function playBurst() {
+  const now = audioCtx.currentTime;
+  for (let i = 0; i < 3; i++) {
+    const t = now + i * 0.12;
+    const bufLen = audioCtx.sampleRate * 0.05;
+    const buf = audioCtx.createBuffer(1, bufLen, audioCtx.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let j = 0; j < bufLen; j++) d[j] = (Math.random() * 2 - 1) * Math.exp(-j / (bufLen * 0.1));
+    const s = audioCtx.createBufferSource();
+    s.buffer = buf;
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.5, t);
+    g.gain.exponentialRampToValueAtTime(0.01, t + 0.06);
+    s.connect(g).connect(audioCtx.destination);
+    s.start(t); s.stop(t + 0.06);
+    
+    const o = audioCtx.createOscillator();
+    o.frequency.setValueAtTime(120, t);
+    o.frequency.exponentialRampToValueAtTime(30, t + 0.07);
+    const og = audioCtx.createGain();
+    og.gain.setValueAtTime(0.35, t);
+    og.gain.exponentialRampToValueAtTime(0.01, t + 0.07);
+    o.connect(og).connect(audioCtx.destination);
+    o.start(t); o.stop(t + 0.07);
+  }
+}
+
+// Reload sound
+function playReload() {
+  const now = audioCtx.currentTime;
+  // Click
+  const o1 = audioCtx.createOscillator();
+  o1.frequency.setValueAtTime(800, now);
+  o1.frequency.exponentialRampToValueAtTime(200, now + 0.05);
+  const g1 = audioCtx.createGain();
+  g1.gain.setValueAtTime(0.3, now);
+  g1.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+  o1.connect(g1).connect(audioCtx.destination);
+  o1.start(now); o1.stop(now + 0.05);
+
+  // Slide
+  const o2 = audioCtx.createOscillator();
+  o2.type = 'sawtooth';
+  o2.frequency.setValueAtTime(100, now + 0.15);
+  o2.frequency.linearRampToValueAtTime(600, now + 0.3);
+  const g2 = audioCtx.createGain();
+  g2.gain.setValueAtTime(0.15, now + 0.15);
+  g2.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+  o2.connect(g2).connect(audioCtx.destination);
+  o2.start(now + 0.15); o2.stop(now + 0.35);
+
+  // Clack
+  const o3 = audioCtx.createOscillator();
+  o3.frequency.setValueAtTime(1200, now + 0.4);
+  o3.frequency.exponentialRampToValueAtTime(400, now + 0.45);
+  const g3 = audioCtx.createGain();
+  g3.gain.setValueAtTime(0.3, now + 0.4);
+  g3.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
+  o3.connect(g3).connect(audioCtx.destination);
+  o3.start(now + 0.4); o3.stop(now + 0.45);
+}
+
+// Mind control zap
+function playMindControl() {
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(300, now);
+  osc.frequency.exponentialRampToValueAtTime(1500, now + 0.3);
+  osc.frequency.exponentialRampToValueAtTime(100, now + 0.8);
+  
+  const lfo = audioCtx.createOscillator();
+  lfo.frequency.value = 12;
+  const lg = audioCtx.createGain();
+  lg.gain.value = 200;
+  lfo.connect(lg).connect(osc.frequency);
+
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0.25, now);
+  g.gain.exponentialRampToValueAtTime(0.01, now + 0.9);
+  osc.connect(g).connect(audioCtx.destination);
+  lfo.start(now); osc.start(now);
+  lfo.stop(now + 0.9); osc.stop(now + 0.9);
+}
+
+// Kirov reporting
+function playKirov() {
+  const now = audioCtx.currentTime;
+  // Deep engine drone
+  const osc = audioCtx.createOscillator();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(60, now);
+  osc.frequency.linearRampToValueAtTime(80, now + 1.0);
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0.2, now);
+  g.gain.linearRampToValueAtTime(0.3, now + 0.5);
+  g.gain.exponentialRampToValueAtTime(0.01, now + 1.2);
+  
+  const lp = audioCtx.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.frequency.value = 200;
+  
+  osc.connect(lp).connect(g).connect(audioCtx.destination);
+  osc.start(now); osc.stop(now + 1.2);
+
+  // Propeller chop
+  const chop = audioCtx.createOscillator();
+  chop.type = 'square';
+  chop.frequency.setValueAtTime(8, now);
+  const cg = audioCtx.createGain();
+  cg.gain.setValueAtTime(0.1, now);
+  cg.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
+  chop.connect(cg).connect(audioCtx.destination);
+  chop.start(now); chop.stop(now + 1.0);
+}
+
+// Conscript ready
+function playConscript() {
+  const now = audioCtx.currentTime;
+  // March-like beats
+  for (let i = 0; i < 4; i++) {
+    const t = now + i * 0.2;
+    const o = audioCtx.createOscillator();
+    o.frequency.setValueAtTime(i % 2 === 0 ? 200 : 260, t);
+    o.frequency.exponentialRampToValueAtTime(80, t + 0.1);
+    const g = audioCtx.createGain();
+    g.gain.setValueAtTime(0.3, t);
+    g.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(t); o.stop(t + 0.12);
+  }
+}
+
+// Explosion
+function playExplosion() {
+  const now = audioCtx.currentTime;
+  const bufLen = audioCtx.sampleRate * 1.0;
+  const buf = audioCtx.createBuffer(1, bufLen, audioCtx.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < bufLen; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufLen * 0.15));
+  const s = audioCtx.createBufferSource();
+  s.buffer = buf;
+  
+  const lp = audioCtx.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.frequency.setValueAtTime(2000, now);
+  lp.frequency.exponentialRampToValueAtTime(100, now + 0.8);
+
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0.6, now);
+  g.gain.exponentialRampToValueAtTime(0.01, now + 1.0);
+
+  s.connect(lp).connect(g).connect(audioCtx.destination);
+  s.start(now); s.stop(now + 1.0);
+
+  // Sub bass hit
+  const o = audioCtx.createOscillator();
+  o.frequency.setValueAtTime(80, now);
+  o.frequency.exponentialRampToValueAtTime(20, now + 0.5);
+  const og = audioCtx.createGain();
+  og.gain.setValueAtTime(0.5, now);
+  og.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+  o.connect(og).connect(audioCtx.destination);
+  o.start(now); o.stop(now + 0.5);
+}
+
+function playSound(type) {
+  resumeAudio();
+  switch(type) {
+    case 'burst': playBurst(); break;
+    case 'reload': playReload(); break;
+    case 'mindcontrol': playMindControl(); break;
+    case 'kirov': playKirov(); break;
+    case 'conscript': playConscript(); break;
+    case 'explosion': playExplosion(); break;
+  }
+}
+
+// ====== BROTHER STATE ======
+let annoyance = 0;
+let love = 50;
+let chaos = 0;
+let pokeCount = 0;
+
+const faces = ['😎','😏','🤪','😤','🤣','😈','🥺','😴','🤓','💀','😱','🫡'];
+
+const talkQuotes = [
+  "Mom said it's MY turn on the Xbox.",
+  "I'm not touching you! I'm not touching you!",
+  "Can I have a bite? *takes the whole thing*",
+  "I learned this move in Yuri's Revenge... MIND CONTROL!",
+  "What if we combined all the cereal boxes into one?",
+  "I told mom you said a bad word. Just kidding. Or am I?",
+  "Remember when you fell off the bike? Classic. I have photos.",
+  "Are you winning, bro? No? Skill issue.",
+  "I'll trade you my broccoli for your dessert. Fair deal.",
+  "Hey, pull my finger. Trust me this time.",
+  "Plot twist: I AM the older brother now.",
+  "I was the favorite this whole time. Sorry you had to find out like this.",
+  "What's mine is mine, what's yours is also mine. Brother code.",
+  "Don't tell mom but I broke the vase. Actually, YOU broke the vase.",
+  "Kirov reporting! *makes airplane noises around room*",
+];
+
+const annoyQuotes = [
+  "STOP POKING ME. *pokes back harder*",
+  "MOM! THEY'RE ANNOYING ME AGAIN!",
+  "That's it. I'm telling dad.",
+  "I'm going to remember this when I pick the movie tonight.",
+  "You're SO getting the worst controller.",
+  "*starts copying everything you say*",
+  "Why are you like this? Oh wait, same parents. Makes sense.",
+  "I'm deleting your save file. Just kidding. Maybe.",
+  "Initiating Yuri's Revenge protocol on YOU!",
+];
+
+const feedQuotes = [
+  "*inhales entire burger in 0.3 seconds* Got more?",
+  "This tastes like mom's cooking. That's NOT a compliment.",
+  "Okay you're my favorite sibling now. For 5 minutes.",
+  "I'll share my fries with you. *gives you one fry*",
+  "*happy munching noises* You're alright, bro.",
+  "Finally! I've been starving since... 10 minutes ago.",
+];
+
+const fightQuotes = [
+  "PILLOW FIIIIIGHT! *swings wildly, hits lamp*",
+  "I call the big pillow! No take-backs!",
+  "Truce? PSYCH! *smacks with pillow*",
+  "*builds pillow fort* You'll never defeat me!",
+  "That's my power move! The BROTHER SLAM!",
+  "Ow! You hit too hard! ...DO IT AGAIN!",
+];
+
+function updateStats() {
+  annoyance = Math.max(0, Math.min(100, annoyance));
+  love = Math.max(0, Math.min(100, love));
+  chaos = Math.max(0, Math.min(100, chaos));
+  
+  document.getElementById('annoyance').textContent = annoyance;
+  document.getElementById('love').textContent = love;
+  document.getElementById('chaos').textContent = chaos;
+
+  // Update mood ring color
+  const ring = document.getElementById('moodRing');
+  if (chaos > 70) ring.style.borderColor = '#ef476f';
+  else if (love > 70) ring.style.borderColor = '#06d6a0';
+  else if (annoyance > 70) ring.style.borderColor = '#ff6b35';
+  else ring.style.borderColor = '#ffd166';
+}
+
+function say(text) {
+  document.getElementById('speechBubble').textContent = text;
+}
+
+function addLog(entry) {
+  const log = document.getElementById('log');
+  const div = document.createElement('div');
+  div.className = 'log-entry';
+  div.textContent = entry;
+  log.appendChild(div);
+  log.scrollTop = log.scrollHeight;
+}
+
+function randomFace() {
+  return faces[Math.floor(Math.random() * faces.length)];
+}
+
+function pick(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function spawnParticles(x, y, count) {
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 40 + Math.random() * 80;
+    p.style.left = x + 'px';
+    p.style.top = y + 'px';
+    p.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+    p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+    p.style.background = ['#ff6b35','#ffd166','#ef476f','#06d6a0'][Math.floor(Math.random()*4)];
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 600);
+  }
+}
+
+// ====== ACTIONS ======
+
+function poke() {
+  pokeCount++;
+  const avatar = document.getElementById('avatar');
+  avatar.textContent = randomFace();
+  
+  if (pokeCount % 5 === 0) {
+    say("STOP POKING MY FACE! 😤");
+    annoyance += 10;
+    addLog(`👆 Poked Bratislav (x${pokeCount}). He's getting mad.`);
+  } else {
+    say(pick(["Hey!", "Quit it!", "Hehe that tickles", "Do that again I dare you", "👀"]));
+    annoyance += 2;
+    addLog(`👆 Poked Bratislav's face.`);
+  }
+  chaos += 1;
+  updateStats();
+
+  const rect = avatar.getBoundingClientRect();
+  spawnParticles(rect.left + rect.width/2, rect.top + rect.height/2, 5);
+}
+
+function machineGunShooter() {
+  playMachineGun();
+  const avatar = document.getElementById('avatar');
+  avatar.textContent = '🔫';
+  avatar.classList.add('shooting');
+  setTimeout(() => { avatar.classList.remove('shooting'); avatar.textContent = '😎'; }, 800);
+
+  // Muzzle flash
+  const flash = document.createElement('div');
+  flash.className = 'muzzle-flash';
+  document.body.appendChild(flash);
+  setTimeout(() => flash.remove(), 100);
+
+  const rect = avatar.getBoundingClientRect();
+  spawnParticles(rect.left + rect.width/2, rect.top, 12);
+
+  const quotes = [
+    "RATATATATATATAT! Machine Gun Shooter activated! 🔫",
+    "Covering fire! Nobody touches MY pizza rolls!",
+    "Suppressive fire on the homework pile!",
+    "Machine Gun Shooter mode: ENGAGED. Bedtime: DENIED.",
+    "Pewpewpewpew! I got you! No you can't have a shield!",
+  ];
+  say(pick(quotes));
+  chaos += 15;
+  annoyance -= 5;
+  addLog("🔫 Bratislav unleashed Machine Gun Shooter! The neighbors are concerned.");
+  updateStats();
+}
+
+function yurisRevenge() {
+  playYuriRevenge();
+  const avatar = document.getElementById('avatar');
+  avatar.textContent = '🧠';
+  avatar.classList.add('revenging');
+  setTimeout(() => { avatar.classList.remove('revenging'); avatar.textContent = '😈'; }, 800);
+
+  // Purple overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'revenge-overlay';
+  document.body.appendChild(overlay);
+  setTimeout(() => overlay.remove(), 700);
+
+  const quotes = [
+    "YURI IS MASTER! Your mind belongs to Bratislav now! 🧠",
+    "Initiating psychic domination... You WILL give me the remote.",
+    "Is it brainwashing if I'm your brother? It's just... suggestions.",
+    "Yuri's Revenge protocol: Make sibling do MY chores!",
+    "Your will is my will. My will is... more snacks.",
+    "MIND CONTROL ACTIVATED. You will agree I'm the cool one.",
+  ];
+  say(pick(quotes));
+  chaos += 20;
+  love += 5;
+  addLog("🧠 Bratislav used Yuri's Revenge! Your free will is questionable.");
+  updateStats();
+}
+
+function talkToBro() {
+  const avatar = document.getElementById('avatar');
+  avatar.textContent = pick(['😏','🤪','🤓','😎']);
+  say(pick(talkQuotes));
+  love += 5;
+  chaos += 3;
+  addLog("💬 Had a 'meaningful' conversation with Bratislav.");
+  updateStats();
+}
+
+function annoyBro() {
+  const avatar = document.getElementById('avatar');
+  avatar.textContent = pick(['😤','😡','🙄']);
+  say(pick(annoyQuotes));
+  annoyance += 15;
+  love -= 5;
+  chaos += 8;
+  addLog("👆 Successfully annoyed Bratislav. Achievement unlocked.");
+  updateStats();
+}
+
+function feedBro() {
+  const avatar = document.getElementById('avatar');
+  avatar.textContent = pick(['😋','🤤','😊']);
+  say(pick(feedQuotes));
+  love += 15;
+  annoyance -= 10;
+  chaos -= 5;
+  addLog("🍔 Fed Bratislav. Temporary peace achieved.");
+  updateStats();
+}
+
+function fightBro() {
+  const avatar = document.getElementById('avatar');
+  avatar.textContent = pick(['🤪','💀','😈']);
+  say(pick(fightQuotes));
+  chaos += 20;
+  love += 3;
+  annoyance += 5;
+
+  const rect = avatar.getBoundingClientRect();
+  spawnParticles(rect.left + rect.width/2, rect.top + rect.height/2, 15);
+
+  addLog("🥊 PILLOW FIGHT! Things got out of hand. A lamp was sacrificed.");
+  updateStats();
+}
+
+// Idle chatter
+setInterval(() => {
+  if (Math.random() < 0.15) {
+    const idle = [
+      "*stares at you*",
+      "*makes weird noise*",
+      "*steals your phone charger*",
+      "*sits too close on the couch*",
+      "*breathes loudly on purpose*",
+      "*hums Yuri's Revenge theme badly*",
+      "*pretends to be a machine gun*",
+    ];
+    addLog("😎 " + pick(idle));
+  }
+}, 8000);
+</script>
+
+</body>
+</html>
